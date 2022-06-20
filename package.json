@@ -1,8 +1,13 @@
 {
   "name": "sao-ui-test",
-  "version": "1.0.15",
+  "version": "1.0.19",
   "author": "Chen Andy",
   "description": "an ui like sao utils,this is just a demo",
-  "keywords": ["UI","SAO"],
-  "main": "index.js"
+  "keywords": ["UI","SAO","Vue2","组件库"],
+  "main": "lib/sao-ui.common.js",
+  "dependencies": {
+    "vue": "^2.6.11",
+    "jquery": "^3.6.0",
+    "jquery-ui-dist": "^1.13.1"
+  }
 }
