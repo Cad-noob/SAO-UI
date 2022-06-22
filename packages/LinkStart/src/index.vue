@@ -302,21 +302,25 @@ export default {
         this.End();
         timer2 = null;
       },this.secondDelay);
+
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer1);
+        clearInterval(timer2);
+      });
     }
   },
   watch:{
     visible:function (val){
       if(val){
-        console.log(1);
         this.saoStart();
       }
     }
   },
-  // mounted() {
-  //   if(this.visible){
-  //     this.saoStart();
-  //   }
-  // }
+  mounted() {
+    if(this.visible){
+      this.saoStart();
+    }
+  }
 }
 </script>
 

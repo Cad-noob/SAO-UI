@@ -59,6 +59,10 @@ export default {
         this.$refs.saoAlert.classList.remove('Close');
         timer = null;
       },this.delayCloseDuration)
+
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(timer);
+      });
     },
     okEvent(){
       this.$emit('ok');
