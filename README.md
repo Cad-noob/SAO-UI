@@ -278,6 +278,14 @@ export default {
 | total    | 总血量，如上一样                                             | Number | —      | 100         |
 | level    | 用户等级                                                     | Number | —      | 0           |
 
+## 个人信息框 info
+
+模仿SAO UTILS的弹出框，`alt+i`既可弹出信息框
+
+标签:`<info></info>`
+
+
+
 ## v-drag
 
 添加了拖拽的directive，想用的话就直接在标签里使用吧，使用时`v-drag = "true"`

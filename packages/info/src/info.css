@@ -1,0 +1,132 @@
+.info{
+    position: fixed;
+    z-index: 500;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+}
+
+.item_box{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 350px;
+    position: absolute;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.item{
+    --radius:55px;
+    width: var(--radius);
+    height: var(--radius);
+    border-radius: 50%;
+    border: 2px solid rgba(201, 198, 198,.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top:-500px;
+    animation: itemDown .2s ease forwards;
+}
+
+.item:nth-child(5){
+    animation-delay: 0s;
+}
+.item:nth-child(4){
+    animation-delay: .1s;
+}
+.item:nth-child(3){
+    animation-delay: .2s;
+}
+.item:nth-child(2){
+    animation-delay: .3s;
+}
+.item:nth-child(1){
+    animation-delay: .4s;
+}
+
+@keyframes itemDown {
+    from{
+        top:-500px;
+    }
+    to{
+        top:0;
+    }
+}
+
+.active{
+    border:2px solid rgba(243, 175, 18, 0.6)!important;
+}
+
+.active .in-circle {
+    background: rgba(243, 175, 18, 0.8)!important;
+}
+
+.active .in-circle i {
+    color:rgba(255,255,255,.9)!important;
+}
+
+.item:hover .in-circle{
+    background: rgba(243, 175, 18, 0.8);
+}
+
+.item:hover .in-circle i{
+    color:rgba(255,255,255,.9);
+}
+
+.item:hover{
+    border:2px solid rgba(243, 175, 18, 0.6);
+}
+
+.item_box_active{
+    -webkit-mask: -webkit-gradient(linear,0% 0%,0% 100%,from(rgba(222,187,71,1)),to(rgba(36,142,36,.3)));
+}
+
+.item .in-circle i{
+    font-size: 26px;
+    color: rgb(185, 183, 183);
+}
+
+.item .in-circle{
+    width: calc(var(--radius) - 7px);
+    height: calc(var(--radius) - 7px);
+    border-radius: 50%;
+    background: rgba(255,255,255,.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.animated_fadeIn{
+    animation: fadeIn .2s ease forwards;
+}
+.animated_fadeOut{
+    animation: fadeOut .2s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        background: rgba(0,0,0,0);
+        backdrop-filter: blur(0px);
+    }
+
+    to {
+        background: rgba(0,0,0,.4);
+        backdrop-filter: blur(2px);
+    }
+}
+@keyframes fadeOut {
+    from {
+        background: rgba(0,0,0,.4);
+        backdrop-filter: blur(2px);
+    }
+
+    to {
+        background: rgba(0,0,0,0);
+        backdrop-filter: blur(0px);
+    }
+}
