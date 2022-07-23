@@ -5,17 +5,17 @@
     <div class="xt_left"></div>
     <div class="xt_right"><span>{{username}}</span></div>
     <div class="number_xt">
-      <div>{{current}}/{{total}}</div><div>lv.{{level}}</div>
+      <div>{{currentHp}}/{{total}}</div><div>lv.{{level}}</div>
     </div>
     <div class="xt_border">
       <div class="xt_border_left"></div>
       <div class="xt_border_right">
         <div class="tb_line"></div>
-        <div class="xt_in"></div>
+        <div class="xt_in xt_in_green"></div>
         <div class="tb_line"></div>
       </div>
     </div>
-    <svg height="23px" width="260px" class="svg_border" style="z-index:3">
+    <svg height="23px" width="260px" class="svg_border">
       <polygon points="0,0 260,0 255,16 124,16 120,23 0,23"
                style="fill:none;stroke:rgb(218,215,215);stroke-width:1;"/>
     </svg>
@@ -41,13 +41,13 @@ export default {
     current:{
       type:Number,
       default(){
-        return '100';
+        return 100;
       }
     },
     total:{
       type:Number,
       default(){
-        return '100';
+        return 100;
       }
     },
     level:{
@@ -57,30 +57,78 @@ export default {
       }
     }
   },
+  data(){
+    return{
+      percent:1,
+      currentHp:100,
+      duration:1000,
+    }
+  },
+  computed:{
+    durationCss:function (){
+      return this.duration + 'ms'
+    }
+  },
   methods:{
-    changed(val){
-      let percent = Math.round(val/this.total*100);
-      let xt = document.querySelector('.xt_in');
-      xt.style.width = percent + '%';
-      if(percent<30){
-        xt.classList.remove('xt_in_green');
-        xt.classList.add('xt_in_red');
-      }else{
-        xt.classList.add('xt_in_green');
-        xt.classList.remove('xt_in_red');
-      }
-    },
     music(){
       this.$refs.Click.play();
     }
   },
   watch:{
-    current:function (val){
-      this.changed(val)
+    current:function (n,o){
+      let c = n - o;
+      let absC = Math.abs(c);
+      let delay = Math.floor(Math.abs(1000/c));
+      if(c>0){
+        for(let i=0;i<absC;i++){
+          setTimeout(()=>{
+            this.currentHp++;
+          },delay*i)
+        }
+      }else if(c<0){
+        for(let i=0;i<absC;i++){
+          setTimeout(()=>{
+            this.currentHp--;
+          },delay*i)
+        }
+      }
+
+      this.percent = Math.round(n/this.total*100);
+    },
+    percent:{
+      handler:function (val){
+        let xt = document.querySelector('.xt_in');
+        xt.style.width = val + '%';
+      }
+    },
+    currentHp:{
+      handler:function (val){
+        let xt = document.querySelector('.xt_in');
+        let percent = Math.round(val/this.total*100);
+        if(percent<25){
+          xt.classList.remove('xt_in_green');
+          xt.classList.remove('xt_in_yellow');
+          xt.classList.add('xt_in_red');
+        }else if(percent>=25 && percent <60){
+          xt.classList.remove('xt_in_red');
+          xt.classList.remove('xt_in_green');
+          xt.classList.add('xt_in_yellow');
+        }
+        else{
+          xt.classList.add('xt_in_green');
+          xt.classList.remove('xt_in_red');
+          xt.classList.remove('xt_in_yellow');
+        }
+      }
     }
   },
+  created(){
+    this.currentHp = this.current;
+    this.percent = Math.round(this.currentHp/this.total*100);
+  },
   mounted(){
-    this.changed(this.current)
+    let xt = document.querySelector('.xt_in');
+    xt.style.setProperty('--duration',this.duration +'ms');
   },
 }
 </script>
@@ -101,8 +149,6 @@ export default {
   --fontcolor: #e1dede;
   --hover: rgba(229, 231, 236, 0.6);
   position: fixed;
-  /*top:10%;*/
-  /*left:10%;*/
   width:400px;
   height: 40px;
   display: flex;
@@ -164,12 +210,16 @@ export default {
   background: linear-gradient(to right,var(--bgColor) 50%,rgba(220, 212, 212, 0));
   display: flex;
   align-items: center;
-  padding-left: 8px;
-  width: 66px;
+  /*padding-left: 8px;*/
+  user-select: none;
+}
+.xt_right>span{
+  min-width: 70px;
+  max-width: 72px;
+  text-align: center;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  user-select: none;
 }
 
 .XTBox:hover .xt_right{
@@ -215,11 +265,15 @@ export default {
 
 .xt_in{
   height: 21px;
-  transition: all 1s ease;
+  transition: all var(--duration) ease;
 }
 
 .xt_in_green{
   background: linear-gradient(to right,rgb(211,234,124),rgb(154,211,52));
+}
+
+.xt_in_yellow{
+  background: linear-gradient(to right, rgb(235, 238, 112), rgb(244, 250, 73));
 }
 
 .xt_in_red{

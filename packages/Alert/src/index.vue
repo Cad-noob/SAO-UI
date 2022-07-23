@@ -1,8 +1,9 @@
 <template>
-  <div ref="saoAlert" class="saoMsgBox_fa" v-show="visible">'
+  <div ref="saoAlert" class="saoMsgBox_fa" v-show="visible">
 
     <audio ref="Alert" src="../../../lib/sounds/Popup.SAO.Alert.mp3"></audio>
     <audio ref="Dismiss" src="../../../lib/sounds/Dismiss.SAO.Message.mp3"></audio>
+    <audio ref="Click" src="../../../lib/sounds/Feedback.SAO.Click.mp3"></audio>
 
     <div class="saoMsgBox">
       <div class="title">
@@ -70,6 +71,7 @@ export default {
     },
     closePlay(){
       this.$refs.Dismiss.play();
+      this.$refs.Click.play();
     },
     openPlay(){
       this.$refs.Alert.play();
@@ -83,9 +85,9 @@ export default {
     }
   },
   mounted() {
-    if(this.visible){
-      this.openPlay();
-    }
+    // if(this.visible){
+    //   this.openPlay();
+    // }
     if(!this.icon){
       this.$refs.saoAlert.addEventListener('click',this.CloseAlert);
     }

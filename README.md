@@ -1,41 +1,59 @@
-## 这是一个SAO-UI TEST版本
+## 这是一个SAO-UI BETA版本
 
 基于`Vue2`的UI组件库，模仿了Sao Utils，之后有时间的话我会发布更好更完善的SAO-UI
 
-设计的不是很完美，需要你有一定的Vue基础
+设计的不是很完美，文档也是不太完美，这是我第一次尝试去做这件事
 
-暂时先写了几个小组件，正式版本还有待慢慢完善，总之先写起来
+写的真的很痛苦但是也很享受，想了很多千奇百怪的方法还原那些设计，之后会在阿B发视频介绍一下UI如何使用
 
-感谢akilar提供的帮助，开发过类似UI的朋友
+虽然写了shit山，但是也要准备面试了优化以后再说吧
 
-github: https://github.com/Cad-noob/SAO-UI
+害！我是0年开发经验的小白，不好找啊
+
+github: https://github.com/Cad-noob/SAO-UI（可能不会及时更新）
 
 ## 更新内容
 
-1.解决了一些逻辑上没考虑到位的BUG
+1.增加了横向拖拽
 
-2.之前的文档有描述不清的地方，进行了改动
+2.增加了快捷键和鼠标向下滑动呼出个人菜单栏
 
-
+3.更正了原来的组件逻辑设计上的错误，并对部分组件进行了调优
 
 ## 安装&引用
 
 安装：
 
 ```
-npm i sao-ui-test
+npm i sao-ui-beta
 ```
 
 全局引用
 
 ```
 //main.js
-import sao from 'sao-ui-test'
+import sao from 'sao-ui-beta'
 ```
 
 ## 音频TIPS
 
-所有音频都是不能打开网页就立即播放，这个大家都懂为什么。所以使用起来得符合规范，例如进场的LINK START就可以采取点击一些”小玩意”来触发。
+所有音频都是不能打开网页就立即播放，这个大家都懂为什么。所以使用起来得符合规范，例如进场的LINK START就可以采取点击一些”小玩意”来触发。所以LINK START并不适用于打开网页直接触发。
+
+## 拖拽
+
+添加了拖拽的directive，想用的话就直接在标签里使用吧，使用时`v-drag = "true"`
+
+如果想LIVE2D这种只想横向拖拽也可以使用`v-dragX = "true"`
+
+### 使用方法
+
+```
+//main.js
+import {Drag,DragX} from 'sao-ui-test'
+
+Vue.directive('drag',Drag)
+Vue.directive('dragX',DragX)
+```
 
 ## alert框
 
@@ -99,7 +117,7 @@ export default {
 | -------- | ------------------------------------ | -------- |
 | ok       | 当显示底部开关后，点击蓝色按钮的回调 | —        |
 
-## 入场动画
+## LINK START动画
 
 一个类似SAO动画里的入场动画，纯CSS写的3D动画算是比较创意的地方？
 
@@ -150,13 +168,13 @@ export default {
 
 ## Live2d
 
-一个还在不断完善的组件，其实不用开放属性有接触过的应该都懂那些参数配置是啥，总之先这样了。基于GITHUB上各位大佬们的代码，我只是做了个简单的封装和修改。
+一个还在不断完善的组件，其实不用开放属性有接触过的应该都懂那些参数配置是啥，总之先这样了。基于GITHUB上各位大佬们的代码，我只是做了个简单的修改。
 
 因为waifu-tips.js采用了大量的jquery，我不太想改成原生了（懒），文档中会附带vue2中所需要做的jquery该如何配置，有兴趣的朋友可以帮我改改哈哈。
 
 模型现在是挂在我服务器上的，所以如果流量不够了以后可能会转其他地方，或者大家自己下载配置？
 
-PS：我关闭了原作者很多的功能，我不希望搞的那么复杂，当然不是说不好，如果你们喜欢直接不要用我的这套就好
+PS：我关闭了原作者很多的功能，我希望看起来更简洁，当然不是说原来的不好。
 
 标签:`<live2d></live2d>`
 
@@ -169,11 +187,10 @@ PS：我关闭了原作者很多的功能，我不希望搞的那么复杂，当
 ```
 <template>
   <div>
-    <live2d :textures-id="textId" :hitokoto="false" :json="json" :edge-side="75"></live2d>
+    <live2d v-dragX="true" :textures-id="textId" :hitokoto="false" :json="json" :edge-side="75"></live2d>
   </div>
 </template>
 <script>
-import 'jquery-ui-dist/jquery-ui';
 
 export default {
   data(){
@@ -192,20 +209,16 @@ export default {
 
 | 参数     | 说明                                                         | 类型    | 可选值     | 默认值                                          |
 | -------- | ------------------------------------------------------------ | ------- | ---------- | :---------------------------------------------- |
-| Textures | 模型皮肤ID，总共有几十个吧，暂时更新了10个，会陆续更新的（修改配置好累啊，自己没事可以随便填填ID也许我就更新了） | Number  | 1~40       | 1                                               |
+| Textures | 模型皮肤ID，总共有几十个吧，暂时更新了10个，会陆续更新的（修改配置好累啊，自己没事可以随便填填ID也许我就更新了） | Number  | 1 ~ ?      | 1                                               |
 | Hitokoto | 随机出现一些名人名言，true打开功能，false关闭                | Boolean | true,false | false                                           |
 | Json     | 对话内容文件地址                                             | String  | —          | https://www.yamapink.com/sao-ui/waifu-tips.json |
-| EdgeSide | live2d模型所在初始横坐标百分比                               | Number  | 0~100      | 80                                              |
+| EdgeSide | live2d模型所在初始横坐标百分比                               | Number  | 0 ~ 100    | 80                                              |
 
 注意：
 
 > 1.json文件无论你放在哪，本地也好 anywhere u like ，但是文件名一定得是 waifu-tips.json，不理解的话可以阅读waifu-tips.js
 >
 > 2.json文件的内容参考这个文件就行，很容易看懂的
->
-> 3.记得import jquery-ui
->
-> 4.点击模型控制台会有报错，这是live2d.js的问题，暂时不会有任何影响
 
 ### jquery配置
 
@@ -218,7 +231,6 @@ export default {
 ```
  "dependencies": {
     "jquery": "^3.6.0",
-    "jquery-ui-dist": "^1.13.1"
   }
 ```
 
@@ -240,7 +252,7 @@ module.exports = {
 }
 ```
 
-## HP
+## HP栏
 
 用来现实SAO款式的HP小组件，具体功能怎么去体现，需要大家集思广益，共同猜想
 
@@ -255,13 +267,22 @@ module.exports = {
 ```
 <template>
   <div>
-    <hp :position="['5%','100px']" :username="'Yamapink'" :current="700" :total="1000" :level="10"></hp>
+    <hp :position="['5%','100px']" :username="'Yamapink'" :current="hp" :total="1000" :level="10"></hp>
   </div>
 </template>
 <script>
 
 export default {
-
+ data(){
+    return{
+   	    hp:500,
+    }
+ }
+ beforeMount(){
+    setInterval(()=>{
+      this.hp = Math.round(Math.random()*1000);
+    },2000)
+  }
 }
 </script>
 <style scoped>
@@ -278,24 +299,126 @@ export default {
 | total    | 总血量，如上一样                                             | Number | —      | 100         |
 | level    | 用户等级                                                     | Number | —      | 0           |
 
-## 个人信息框 info
+## 个人菜单栏
 
-模仿SAO UTILS的弹出框，`alt+i`既可弹出信息框
+模仿SAO UTILS的弹出框，`alt+keyCode`既可弹出信息框，鼠标按住1s内快速向Y轴方向滑动一段距离也能呼出。
 
-标签:`<info></info>`
+`<pop-up-menu></<pop-up-menu>`为整个组件的容器
 
+`<menu-bar></menu-bar>`为中间的主菜单
 
+`<left-info></left-info>`为左侧个人信息框，整个我的初期设想是只有个人信息显示
 
-## v-drag
+`<child-bar></child-bar>`为主菜单栏的扩展
 
-添加了拖拽的directive，想用的话就直接在标签里使用吧，使用时`v-drag = "true"`
+这个组件还是比较复杂的，在B站的视频中我会纤细介绍下
 
-### 使用方法
+标签:`<pop-up-menu></<pop-up-menu>`、`<menu-bar></menu-bar>`、`<left-info></left-info>`、`<child-bar></child-bar>`
+
+效果图：
+
+![image-20220723231312842](https://s2.loli.net/2022/07/23/4iAP5hbE72oksYT.png)
+
+### 用法举例
 
 ```
-//main.js
-import {Drag} from 'sao-ui-test'
+<template>
+  <div>
+    <pop-up-menu :slide-down="true" ref="menu">
+      <menu-bar :icon-arr="arr"></menu-bar>
+      <left-info></left-info>
 
-Vue.directive('drag',Drag)
+      <child-bar>
+        <ul id="userInfo">
+          <li @click="close"><i class="fa fa-arrow-circle-up"></i><span>登录</span></li>
+          <li><i class="fa fa-arrow-circle-down"></i><span>退出</span></li>
+          <li><i class="fa fa-info-circle"></i><span>个人信息</span></li>
+        </ul>
+
+        <ul id="friendsLink">
+          <li><i class="fa fa-link"></i><span>友情链接</span></li>
+        </ul>
+
+        <ul id="share">
+          <li><i class="fa fa-coffee"></i><span>文章分享</span></li>
+          <li><i class="fa fa-gift"></i><span>DEMO分享</span></li>
+        </ul>
+
+        <ul id="search">
+          <li><i class="fa fa-search"></i><span>搜索文章</span></li>
+        </ul>
+      </child-bar>
+
+    </pop-up-menu>
+  </div>
+</template>
+<script>
+
+export default {
+  data(){
+    return{
+      arr:[
+        {name:'userInfo',iClass:'fa fa-user',canActive:true},
+        {name:'friendsLink',iClass:'fa fa-users',canActive:true},
+        {name:'share',iClass:'fa fa-coffee',canActive:true},
+        {name:'search',iClass:'fa fa-search',canActive:true},
+        {name:'systemMsg',iClass:'fa fa-cog',canActive:false}
+      ],
+    }
+  },
+  methods:{
+    //调用组件中的关闭方法，对整个组件进行关闭操作
+    close(){
+      this.$refs.menu.close();
+    }
+  },
+}
+</script>
+<style scoped>
+</style>
 ```
 
+
+
+### Attributes
+
+pop-up-menu
+
+| 参数      | 说明                        | 类型    | 可选值     | 默认值 |
+| --------- | --------------------------- | ------- | ---------- | ------ |
+| keyCode   | 配合alt的组合键，弹出菜单栏 | Number  | —          | 65     |
+| slideDown | 时候可以按住滑动鼠标呼出    | Boolean | true,false | false  |
+
+menu-bar
+
+| 参数       | 说明                                                         | 类型    | 可选值 | 默认值 |
+| ---------- | ------------------------------------------------------------ | ------- | ------ | ------ |
+| iconArr    | 图标数组，包含了name,iClass,canActive三个属性,iClass是传入使用的font,name是选项名称（这个很关键和之后的子联动有关），canActive是指是否可以激活（设想是权限相关） | Array   | —      | —      |
+| infoActive | 可以激活左侧的信息科，我初期的设想只有一个，个人信息（支持提建议） | Boolean | —      | —      |
+
+left-info
+
+| 参数     | 说明                             | 类型   | 可选值 | 默认值               |
+| -------- | -------------------------------- | ------ | ------ | -------------------- |
+| username | 用户的名称                       | String | —      | player               |
+| des      | 描述信息，或者你自己想输入的内容 | String | —      | Welcome to SAO world |
+
+### Slot
+
+pop-up-menu
+
+| name | 说明                                                         |
+| ---- | ------------------------------------------------------------ |
+| —    | 可以插入三个联动的子标签（当然可以插入其他的东西），建议还是按照案例中来写 |
+
+left-info
+
+| name | 说明                                                 |
+| ---- | ---------------------------------------------------- |
+| —    | 可以根据接口回调的值插入个人头像，图片等你喜欢的都行 |
+
+child-bar
+
+| name | 说明                                                         |
+| ---- | ------------------------------------------------------------ |
+| —    | 建议按照图中的实例来实现二级菜单,id一定要和传入的iconArr中的name一致 |
