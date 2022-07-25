@@ -1,5 +1,7 @@
 ## 这是一个SAO-UI BETA版本
 
+以后改名叫`sao-ui-beta`,这里以后不再更新（我也不知道自己当初怎么想的233）
+
 基于`Vue2`的UI组件库，模仿了Sao Utils，之后有时间的话我会发布更好更完善的SAO-UI
 
 设计的不是很完美，文档也是不太完美，这是我第一次尝试去做这件事
@@ -10,7 +12,7 @@
 
 害！我是0年开发经验的小白，不好找啊
 
-github: https://github.com/Cad-noob/SAO-UI（可能不会及时更新）
+github: https://github.com/Cad-noob/SAO-UI
 
 ## 更新内容
 
@@ -19,6 +21,8 @@ github: https://github.com/Cad-noob/SAO-UI（可能不会及时更新）
 2.增加了快捷键和鼠标向下滑动呼出个人菜单栏
 
 3.更正了原来的组件逻辑设计上的错误，并对部分组件进行了调优
+
+4.修改了文档中错误的地方
 
 ## 安装&引用
 
@@ -49,7 +53,7 @@ import sao from 'sao-ui-beta'
 
 ```
 //main.js
-import {Drag,DragX} from 'sao-ui-test'
+import {Drag,DragX} from 'sao-ui-beta'
 
 Vue.directive('drag',Drag)
 Vue.directive('dragX',DragX)
@@ -224,7 +228,7 @@ export default {
 
 注意：
 
-> 因为我在配置里依赖了jquery和jjquery-ui，所以兄弟们如果自己也使用了这俩（虽然我不喜欢用），记得看看这俩会不会导致BUG
+> 因为我在配置里依赖了jquery，所以兄弟们如果自己也使用了jquery（虽然我不喜欢用），记得看看这会不会导致BUG
 
 这里列下我的版本，虽然我感觉应该问题不是很大
 
@@ -254,7 +258,7 @@ module.exports = {
 
 ## HP栏
 
-用来现实SAO款式的HP小组件，具体功能怎么去体现，需要大家集思广益，共同猜想
+用来现实SAO款式的HP小组件，具体怎么去表现，需要大家集思广益，共同猜想
 
 标签：`<hp></hp>`
 
@@ -299,9 +303,11 @@ export default {
 | total    | 总血量，如上一样                                             | Number | —      | 100         |
 | level    | 用户等级                                                     | Number | —      | 0           |
 
-## 个人菜单栏
+## 菜单栏
 
-模仿SAO UTILS的弹出框，`alt+keyCode`既可弹出信息框，鼠标按住1s内快速向Y轴方向滑动一段距离也能呼出。
+模仿SAO UTILS的弹出框，`alt+keyCode`既可弹出信息框，`keyCode`需要自己传入设定，鼠标按住1s内快速向Y轴方向滑动一段距离也能呼出（需设置）
+
+这个栏有很多有意思的动画，今后在想如何实现3D曲面的变化
 
 `<pop-up-menu></<pop-up-menu>`为整个组件的容器
 
@@ -311,7 +317,7 @@ export default {
 
 `<child-bar></child-bar>`为主菜单栏的扩展
 
-这个组件还是比较复杂的，在B站的视频中我会纤细介绍下
+这个组件还是比较复杂的，今后在B站的视频中我会纤细介绍下
 
 标签:`<pop-up-menu></<pop-up-menu>`、`<menu-bar></menu-bar>`、`<left-info></left-info>`、`<child-bar></child-bar>`
 
@@ -384,10 +390,10 @@ export default {
 
 pop-up-menu
 
-| 参数      | 说明                        | 类型    | 可选值     | 默认值 |
-| --------- | --------------------------- | ------- | ---------- | ------ |
-| keyCode   | 配合alt的组合键，弹出菜单栏 | Number  | —          | 65     |
-| slideDown | 时候可以按住滑动鼠标呼出    | Boolean | true,false | false  |
+| 参数      | 说明                        | 类型    | 可选值     | 默认值  |
+| --------- | --------------------------- | ------- | ---------- | ------- |
+| keyCode   | 配合alt的组合键，弹出菜单栏 | Number  | —          | 65（A） |
+| slideDown | 时候可以按住滑动鼠标呼出    | Boolean | true,false | false   |
 
 menu-bar
 

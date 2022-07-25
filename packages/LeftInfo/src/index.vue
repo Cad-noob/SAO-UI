@@ -133,7 +133,7 @@ export default {
   top:200px;
   left: 100%;
   clip-path: polygon(100% 50%,0 100%,0 0);
-  background: rgba(255, 255, 255, .9);
+  background: rgba(255, 255, 255, .85);
 }
 
 .bottom-triangle{
@@ -143,7 +143,7 @@ export default {
   top: 0;
   left: 30px;
   clip-path: polygon(50% 100%,100% 0,0 0);
-  background: rgba(255, 255, 255, .75);
+  background: rgba(255, 255, 255, .6);
 }
 
 .top_notActive{
