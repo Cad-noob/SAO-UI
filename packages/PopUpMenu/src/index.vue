@@ -1,12 +1,16 @@
 <template>
-  <div ref="info" class="info" v-show="visible" @click.self="close">
-    <div data-depth="0.2">
-      <div ref="position" class="position">
-        <slot></slot>
-      </div>
-    </div>
+  <div class="info" v-show="visible" @click.self="close" ref="info">
     <audio ref="Popup" src="../../../lib/sounds/Popup.SAO.Launcher.mp3"></audio>
     <audio ref="Dismiss" src="../../../lib/sounds/Dismiss.SAO.Launcher.mp3"></audio>
+
+    <div class="curved" ref="curved" @click.self="close">
+      <div data-depth="0.2">
+        <div ref="position" class="position">
+          <slot></slot>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -25,7 +29,13 @@ export default {
     slideDown:{
       type:Boolean,
       default() {
-        return false;
+        return true;
+      }
+    },
+    curved:{
+      type:Boolean,
+      default(){
+        return true;
       }
     }
   },
@@ -38,7 +48,7 @@ export default {
       delay:500,//500毫秒消失，动画显示
       timer:null,//模仿节流所设置的变量
       JL_Duration:2000, //节流wait时间
-      percent:0,//预期用来做偏移量的百分比，效果不理想搁置中
+      // percent:0,//预期用来做偏移量的百分比，效果不理想搁置中
       maxOffSetX: 70,//X轴最大偏移量
       XMiddle: 25,//便宜到快中心的位置的距离
       Xbj:270,//X坐标边界
@@ -49,7 +59,7 @@ export default {
       flagX:null,//判断鼠标在中心Y轴的左边还是右边
       firstY:0,
       firstTime:null,
-      maxDegree:10,
+      maxDegree:6,
     }
   },
   methods:{
@@ -68,6 +78,7 @@ export default {
 
         const info = this.$refs.info;
         const position = this.$refs.position;
+
         let timer = null;
         //延迟是为了动画效果显示
         timer = setTimeout(()=>{
@@ -98,6 +109,7 @@ export default {
         this.$refs.Popup.play();
         const info = this.$refs.info;
         const position = this.$refs.position;
+        const curved = this.$refs.curved
 
         this.visible = true;
         info.classList.add('animated_fadeIn');
@@ -105,23 +117,35 @@ export default {
         //鼠标位于X轴边界外时，固定在算法中的边缘。
         //鼠标位于X轴边界内时，根据中心左右两边进行一定的偏移
         if(X <= this.Xbj){
-          // this.percent = 1;
-          // this.flagX = 'left';
+          let percent = 1;
           position.style.left = this.Xbj + this.maxOffSetX + 'px';
+          if(this.curved){
+            let offsetD = percent * this.maxDegree;
+            curved.style.transform = `translate(20px,15px) rotateY(${offsetD}deg)`;
+          }
         }else if(X > this.Xbj && X <= window.innerWidth/2){
-          // this.flagX = 'left';
-          // this.percent = (window.innerWidth/2 -X)/(window.innerWidth/2 - this.Xbj)
-          let offset = (window.innerWidth/2 -X)/(window.innerWidth/2 - this.Xbj)*this.maxOffSetX
+          let percent = (window.innerWidth/2 -X)/(window.innerWidth/2 - this.Xbj);
+          let offset = percent * this.maxOffSetX;
           position.style.left = X - this.XMiddle + offset + 'px';
+          if(this.curved){
+            let offsetD = percent * this.maxDegree;
+            curved.style.transform = `rotateY(${offsetD}deg)`;
+          }
         }else if(X > window.innerWidth/2 && X < window.innerWidth - this.Xbj){
-          // this.flagX = 'right';
-          // this.percent = (X-window.innerWidth/2)/(window.innerWidth/2 - this.Xbj);
-          let offset = (X-window.innerWidth/2)/(window.innerWidth/2 - this.Xbj)*this.maxOffSetX
+          let percent = (X-window.innerWidth/2)/(window.innerWidth/2 - this.Xbj);
+          let offset = percent * this.maxOffSetX;
           position.style.left = X- this.XMiddle - offset + 'px';
+          if(this.curved){
+            let offsetD = percent * (0 - this.maxDegree);
+            curved.style.transform = `rotateY(${offsetD}deg)`;
+          }
         }else if(X >= window.innerWidth - this.Xbj) {
-          // this.flagX = 'right';
-          // this.percent = 1;
+          let percent = 1;
           position.style.left = window.innerWidth - this.Xbj - this.maxOffSetX + 'px';
+          if(this.curved){
+            let offsetD = percent * (0 - this.maxDegree);
+            curved.style.transform = `translate(40px) rotateY(${offsetD}deg)`;
+          }
         }
 
         //Y轴在上边界处外，固定在Y轴下方,为了让
@@ -132,14 +156,6 @@ export default {
           position.style.top = Y - offset - this.initOffsetY + 'px';
         } else if(Y > window.innerHeight - this.UlHeight + this.maxOffsetY + this.initOffsetY){
           position.style.top = window.innerHeight - this.UlHeight + 'px';
-        }
-
-        if(this.flagX ==='left'){
-          let offsetD = this.percent * this.maxDegree;
-          position.style.transform = `rotateY(${offsetD}deg)`;
-        }else{
-          let offsetD = this.percent * this.maxDegree;
-          position.style.transform = `rotateY($-{offsetD}deg)`;
         }
 
       }
@@ -206,7 +222,7 @@ export default {
     }
 
     //设置Parallax参数，鼠标移动让DOM跟随移动
-    const parallaxInstance = new Parallax(this.$refs.info, {
+    const parallaxInstance = new Parallax(this.$refs.curved, {
       relativeInput: true,
     });
   }
@@ -224,18 +240,26 @@ export default {
   src:url('../../../lib/fonts/ZhuZiAYuanJWD.ttf');
 }
 
-/*因为使用了Parallax插件，所以point-events被迫发生了改变这里强制改一下*/
 .info{
   position: fixed;
   z-index: 500;
   left:0;
-  right:0;
   top:0;
-  bottom:0;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(2px);
   font-family: 'sao','yuanJWD',sans-serif;
+  /*pointer-events: auto!important;*/
+  perspective: 600px;
+}
+/*因为使用了Parallax插件，所以point-events被迫发生了改变这里强制改一下*/
+.curved{
+  position: absolute;
+  width: 100%;
+  height: 100%;
   pointer-events: auto!important;
+  /*transform: translateX(20px) rotateY(6deg)!important;*/
 }
 
 .position{

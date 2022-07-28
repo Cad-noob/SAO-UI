@@ -60,15 +60,6 @@ export default {
           this.$refs.infoBox.classList.remove('animated_close');
           this.$refs.top.classList.remove('top_notActive');
           this.$refs.bottom.classList.remove('bottom_notActive');
-
-          //这里本来想想加旋转偏移量，不太理想，以后再说
-          // let offset = this.$parent.$data.percent * this.MaxDegree;
-          // if(this.$parent.$data.flagX === 'left'){
-          //   this.$refs.infoBox.style.transform = `rotateY(${offset}deg)`;
-          // }else{
-          //   let rOffset = offset - 5 < 0 ? 0 : offset - 5;
-          //   this.$refs.infoBox.style.transform = `rotateY(-${rOffset}deg)`;
-          // }
         }else{
           this.active =false;
         }

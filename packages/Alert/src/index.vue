@@ -107,7 +107,7 @@ export default {
 }
 
 .saoMsgBox_fa{
-  --fa-duration:1s;/*控制整个最外层边框的padding变化的动画时间*/
+  /*--fa-duration:.9s;!*控制整个最外层边框的padding变化的动画时间*!*/
   --close-duration:.5s;/*关闭alert动画时间*/
   --open-duraton: .5s;/*每个打开动画动画时间*/
   /*动画时间最好都别动，否则效果大打折扣*/
@@ -115,35 +115,35 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  animation: paddingOpen ease var(--fa-duration);
-  animation-fill-mode: forwards;
+  /*animation: paddingOpen ease var(--fa-duration);*/
+  /*animation-fill-mode: forwards;*/
 }
 
-@keyframes paddingOpen  {
-  0%{
-    padding: 38px 120px;
-  }
-  53%{
-    padding: 38px 0;
-  }
-  100%{
-    padding:0;
-  }
-}
+/*@keyframes paddingOpen  {*/
+/*  0%{*/
+/*    padding: 38px 120px;*/
+/*  }*/
+/*  53%{*/
+/*    padding: 38px 0;*/
+/*  }*/
+/*  100%{*/
+/*    padding:0;*/
+/*  }*/
+/*}*/
 
 .Close{
-  animation: paddingClose ease var(--close-duration);
-  animation-fill-mode: forwards;
+  /*animation: paddingClose ease var(--close-duration);*/
+  /*animation-fill-mode: forwards;*/
 }
 
-@keyframes paddingClose{
-  0%{
-    padding:0;
-  }
-  100%{
-    padding:0 187px;
-  }
-}
+/*@keyframes paddingClose{*/
+/*  0%{*/
+/*    padding:0;*/
+/*  }*/
+/*  100%{*/
+/*    padding:0 187px;*/
+/*  }*/
+/*}*/
 
 .saoMsgBox{
   width: 375px;
