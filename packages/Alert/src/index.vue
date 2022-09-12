@@ -117,6 +117,7 @@ export default {
   transform: translate(-50%,-50%);
   /*animation: paddingOpen ease var(--fa-duration);*/
   /*animation-fill-mode: forwards;*/
+  z-index:500;
 }
 
 /*@keyframes paddingOpen  {*/

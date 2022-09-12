@@ -228,13 +228,13 @@ export default {
 .svg_border{
   position: absolute;
   left: 100px;
-  top:9px;
+  top:8px;
 }
 
 .xt_border{
   position: absolute;
   left: 100px;
-  top:9px;
+  top:8px;
   width: 260px;
   height: 23px;
   clip-path:polygon(120px 100%,124px 16px,98% 16px,100% 0%,0% 0%,0% 100%);

@@ -10,19 +10,23 @@
 
 最近要重新找工作了！行情不好啊...有内推就感谢各位了！
 
+DEMO: https://yamapink.com/sao-ui
+
 github: https://github.com/Cad-noob/SAO-UI
+
+QQ：544172399 	邮箱：544172399@qq.com
 
 ## 更新内容
 
-1.增加了横向拖拽
+1.增加了模型，把模型的配置文件改完了
 
-2.增加了快捷键和鼠标向下滑动呼出个人菜单栏
+2.之前的按需引入是有问题的，现在应该可以正常使用了
 
-3.更正了原来的组件逻辑设计上的错误，并对部分组件进行了调优
+3.修改了alert和菜单栏文档中的错误
 
-4.修改了文档中错误的地方
+4.优化了组件之间的层叠问题
 
-5.增加了呼出菜单曲面效果
+5.修复了菜单栏滑动右侧栏不会消失的问题
 
 ## 安装&引用
 
@@ -75,7 +79,7 @@ Vue.directive('dragX',DragX)
 <template>
   <div>
   	<button @click="open">Alert</button>
-    <sao-alert :icon="true" :title="title" :visible.sync="AlertVisible">
+    <sao-alert :icon="true" :title="title" :visible.sync="AlertVisible" @ok='test'>
       {{msg}}
     </sao-alert>
   </div>
@@ -93,7 +97,10 @@ export default {
   methods:{
     open(){
       this.AlertVisible = true;
-    }
+    },
+    test(){
+	  console.log('test');
+	}
   }
 }
 </script>
@@ -107,7 +114,7 @@ export default {
 | ------- | ------------------------------------------- | ------- | ---------- | :------ |
 | visible | 是否显示 弹出框，支持 .sync 修饰符          | Boolean | true,false | false   |
 | title   | 弹出框的标题                                | String  | —          | Message |
-| icon    | 是否显示底部开关,不显示点击对话框就可以关闭 | Boolean | —          | false   |
+| icon    | 是否显示底部开关,不显示点击对话框就可以关闭 | Boolean | —          | true    |
 
 ### Slot
 
@@ -213,7 +220,7 @@ export default {
 
 | 参数     | 说明                                                         | 类型    | 可选值     | 默认值                                          |
 | -------- | ------------------------------------------------------------ | ------- | ---------- | :---------------------------------------------- |
-| Textures | 模型皮肤ID，总共有几十个吧，暂时更新了10个，会陆续更新的（修改配置好累啊，自己没事可以随便填填ID也许我就更新了） | Number  | 1 ~ ?      | 1                                               |
+| Textures | 模型皮肤ID，总共有几十个吧，暂时更新了10个，会陆续更新的（修改配置好累啊，自己没事可以随便填填ID也许我就更新了） | Number  | 1 ~ 41     | 1                                               |
 | Hitokoto | 随机出现一些名人名言，true打开功能，false关闭                | Boolean | true,false | false                                           |
 | Json     | 对话内容文件地址                                             | String  | —          | https://www.yamapink.com/sao-ui/waifu-tips.json |
 | EdgeSide | live2d模型所在初始横坐标百分比                               | Number  | 0 ~ 100    | 80                                              |
@@ -305,7 +312,7 @@ export default {
 
 ## 菜单栏
 
-模仿SAO UTILS的弹出框，`alt+keyCode`既可弹出信息框，`keyCode`需要自己传入设定，鼠标按住1s内快速向Y轴方向滑动一段距离也能呼出（需设置）
+模仿SAO UTILS的弹出框，`alt+keyCode`既可弹出信息框，`keyCode`需要自己传入设定，鼠标按住666ms内快速向Y轴方向滑动一段距离(250)也能呼出（需设置）
 
 这个栏有很多有意思的动画，今后在想如何实现3D曲面的变化
 
@@ -354,7 +361,6 @@ export default {
           <li><i class="fa fa-search"></i><span>搜索文章</span></li>
         </ul>
       </child-bar>
-
     </pop-up-menu>
   </div>
 </template>
@@ -390,18 +396,20 @@ export default {
 
 pop-up-menu
 
-| 参数      | 说明                        | 类型    | 可选值     | 默认值  |
-| --------- | --------------------------- | ------- | ---------- | ------- |
-| keyCode   | 配合alt的组合键，弹出菜单栏 | Number  | —          | 65（A） |
-| slideDown | 是否可以按住滑动鼠标呼出    | Boolean | true,false | true    |
-| curved    | 是否呼出菜单具有曲面特效    | Boolean | true,false | true    |
+| 参数           | 说明                        | 类型    | 可选值     | 默认值  |
+| :------------- | --------------------------- | ------- | ---------- | ------- |
+| keyCode        | 配合alt的组合键，弹出菜单栏 | Number  | —          | 65（A） |
+| slideDown      | 是否可以按住滑动鼠标呼出    | Boolean | true,false | true    |
+| curved         | 是否呼出菜单具有曲面特效    | Boolean | true,false | true    |
+| slideDownY     | 下滑激活所需要的移动高度差  | Number  | —          | 250     |
+| activeDuration | 下滑激活的时间范围          | Number  | —          | 666     |
 
 menu-bar
 
-| 参数       | 说明                                                         | 类型    | 可选值 | 默认值 |
-| ---------- | ------------------------------------------------------------ | ------- | ------ | ------ |
-| iconArr    | 图标数组，包含了name,iClass,canActive三个属性,iClass是传入使用的font,name是选项名称（这个很关键和之后的子联动有关），canActive是指是否可以激活（设想是权限相关） | Array   | —      | —      |
-| infoActive | 可以激活左侧的信息科，我初期的设想只有一个，个人信息（支持提建议） | Boolean | —      | —      |
+| 参数       | 说明                                                         | 类型   | 可选值 | 默认值   |
+| ---------- | ------------------------------------------------------------ | ------ | ------ | -------- |
+| iconArr    | 图标数组，包含了name,iClass,canActive三个属性,iClass是传入使用的font,name是选项名称（这个很关键和之后的子联动有关），canActive是指是否可以激活（设想是权限相关） | Array  | —      | —        |
+| infoActive | 可以激活左侧的信息科，我初期的设想只有一个，个人信息（支持提建议） | String | —      | userInfo |
 
 left-info
 

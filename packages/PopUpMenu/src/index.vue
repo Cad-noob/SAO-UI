@@ -37,6 +37,20 @@ export default {
       default(){
         return true;
       }
+    },
+    //下滑激活所需要的移动高度差
+    slideDownY:{
+      type:Number,
+      default(){
+        return 250;
+      }
+    },
+    //下滑激活的时间范围
+    activeDuration:{
+      type:Number,
+      default(){
+        return 666;
+      }
     }
   },
   data(){
@@ -182,7 +196,7 @@ export default {
       let secondY = e.clientY;
       let secondTime = new Date();
 
-      if(secondY - this.firstY > 200 && secondTime.getTime() - this.firstTime.getTime() < 1000 && !this.timer && !this.visible){
+      if(secondY - this.firstY > this.slideDownY && secondTime.getTime() - this.firstTime.getTime() < this.activeDuration && !this.timer && !this.visible){
         this.open(this.PositionX,this.firstY);
       }
     },
@@ -242,7 +256,7 @@ export default {
 
 .info{
   position: fixed;
-  z-index: 500;
+  z-index: 400;
   left:0;
   top:0;
   width: 100vw;

@@ -59,7 +59,7 @@ export default {
       if(!this.timer){
         this.timer = setTimeout(()=>{
           this.timer = null;
-        },this.JL_Duration)
+        },this.JL_Duration);
         //播放音乐
         this.$refs.Click.play();
         //如果点击重复的可激活按钮，就撤销激活状态
@@ -142,12 +142,15 @@ export default {
 
         //滚动后左侧消失且激活也消失
         if(this.active){
+          let lis = document.querySelectorAll('.item');
           this.$EventBus.$emit('activeMsg',false);
+          this.$EventBus.$emit('activeChild',{active:false,name:null});
           this.activeItem = null;
           this.active = false;
-          let lis = document.querySelectorAll('li');
           lis.forEach(item=>{
-            item.classList.remove('active');
+            if(item.classList.contains('active')){
+              item.classList.remove('active');
+            }
           })
         }
 
