@@ -9,35 +9,47 @@
       <div class="title">
         <span>{{title}}</span>
       </div>
+
       <div>
         <span><slot></slot></span>
       </div>
+
       <div>
-        <div v-if="icon" class="ok" @click="okEvent">
-          <div class="in_ok"></div>
-        </div>
-        <div v-if="icon" class="close" @click="CloseAlert">
-          <div class="in_close"></div>
-        </div>
+        <i v-if="icon" class="ok" @click="okEvent">
+          <i class="in_ok"></i>
+        </i>
+        <i v-if="icon" class="close" @click="CloseAlert">
+          <i class="in_close"></i>
+        </i>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
+/*
+  实现原理:
+  当每次切换display时动画就会重新启动
+  打开：我们只需要打开时切换display属性并播放音乐，
+  关闭：我们需要加一个关闭动画，他将覆盖之前的动画，并播放音乐
+ */
 export default {
   name: "sao-alert",
   props:{
+    //弹框标题
     title:{
       type:String,
       default(){
         return 'Message'
       },
     },
+    //是否显示按钮
     icon:{
       type:Boolean,
       default: true,
     },
+    //弹框显示或者关闭
     visible:{
       type:Boolean,
       default(){
@@ -54,15 +66,15 @@ export default {
     CloseAlert(){
       this.$refs.saoAlert.classList.add('Close');
       this.closePlay();
-      let timer = null;
-      timer = setTimeout(()=>{
+
+      let timer = setTimeout(()=>{
         this.$emit('update:visible',false);
         this.$refs.saoAlert.classList.remove('Close');
-        timer = null;
       },this.delayCloseDuration)
 
       this.$once("hook:beforeDestroy", () => {
-        clearInterval(timer);
+        clearTimeout(timer);
+        timer = null;
       });
     },
     okEvent(){
@@ -79,18 +91,11 @@ export default {
   },
   watch:{
     visible:function (val){
-      if(val){
-        this.openPlay();
-      }
+      if(val) this.openPlay();
     }
   },
   mounted() {
-    // if(this.visible){
-    //   this.openPlay();
-    // }
-    if(!this.icon){
-      this.$refs.saoAlert.addEventListener('click',this.CloseAlert);
-    }
+    if(!this.icon) this.$refs.saoAlert.addEventListener('click',this.CloseAlert);
   }
 }
 </script>
@@ -115,40 +120,12 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  /*animation: paddingOpen ease var(--fa-duration);*/
-  /*animation-fill-mode: forwards;*/
   z-index:500;
 }
 
-/*@keyframes paddingOpen  {*/
-/*  0%{*/
-/*    padding: 38px 120px;*/
-/*  }*/
-/*  53%{*/
-/*    padding: 38px 0;*/
-/*  }*/
-/*  100%{*/
-/*    padding:0;*/
-/*  }*/
-/*}*/
-
-.Close{
-  /*animation: paddingClose ease var(--close-duration);*/
-  /*animation-fill-mode: forwards;*/
-}
-
-/*@keyframes paddingClose{*/
-/*  0%{*/
-/*    padding:0;*/
-/*  }*/
-/*  100%{*/
-/*    padding:0 187px;*/
-/*  }*/
-/*}*/
-
 .saoMsgBox{
   width: 375px;
-  box-shadow: 0px 0px 32px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 0 32px 4px rgba(0,0,0,0.3);
   border-radius: 2px;
   animation: XOpen ease var(--open-duraton);
   animation-fill-mode: forwards;
@@ -323,6 +300,7 @@ export default {
   font-family: 'yuanJWD', sans-serif;
   font-weight: 400;
   font-size: 23px;
+  padding-left: 2px;
   color: rgb(100, 96, 96);
   animation: appear ease .35s;
   animation-delay: .6s;

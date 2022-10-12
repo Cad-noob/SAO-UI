@@ -52,11 +52,8 @@ export default {
   methods:{
     //激活
     //首先只有点击用户信息左侧栏目才会打开
-    //如果可以被激活,1.非激活状态下激活可以被激活 2.激活状态下激活别的可被激活
-    //如果不可以被激活
     activeFn(item,i){
-      //节流
-      if(!this.timer){
+      if(!this.timer){ //防抖
         this.timer = setTimeout(()=>{
           this.timer = null;
         },this.JL_Duration);
@@ -82,9 +79,6 @@ export default {
                 this.liArr.shift();
               },this.speed*a)
             }
-            this.$once('hook:beforeDestroy',()=>{
-              clearTimeout(timer);
-            })
           }
           //给子菜单传递数据
           if(this.active){
@@ -92,7 +86,6 @@ export default {
           }else{
             this.$EventBus.$emit('activeChild',{active:false,name:null})
           }
-
         }else{
           //点击不可激活的按钮，激活状态为否，激活的按钮也不再赋值
           this.active = false;
@@ -113,19 +106,12 @@ export default {
     //初始化
     init(){
       this.liArr = JSON.parse(JSON.stringify(this.iconArr));
-      // this.activeItem = this.iconArr[0].name;
       let timer = null;
 
-      //延迟激活
+      //延迟激活处在第一位的个人信息
       timer = setTimeout(()=>{
         this.activeFn(this.iconArr[0],0);
-        // this.active = true;
-        // document.querySelector('li').classList.add('active');
-        // this.$EventBus.$emit('activeMsg',this.active);
       },this.activeDelay)
-      this.$once('hook:beforeDestroy',()=>{
-        clearTimeout(timer)
-      })
     },
     mouseWheelHandle(e){
       let X = this.$parent.$refs.position.offsetLeft;
@@ -184,7 +170,6 @@ export default {
           addEventListener('mousewheel',this.mouseWheelHandle);
         }else{
           this.active = false;
-          this.liArr = JSON.parse(JSON.stringify(this.iconArr));
           removeEventListener('mousewheel',this.mouseWheelHandle);
         }
       }

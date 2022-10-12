@@ -79,13 +79,10 @@ export default {
   methods:{
     //关闭信息窗口
     close(){
-      if(!this.timer){
+      if(!this.timer){ //节流
         this.timer = setTimeout(()=>{
           this.timer = null;
         },this.JL_Duration)
-        this.$once('hook:beforeDestroy',()=>{
-          clearTimeout(this.timer)
-        })
 
         this.$refs.Dismiss.play();
         this.startClose = true;
@@ -93,20 +90,20 @@ export default {
         const info = this.$refs.info;
         const position = this.$refs.position;
 
-        let timer = null;
+        info.classList.remove('animated_fadeIn');
+        info.classList.add('animated_fadeOut');
+        position.classList.add('animated_moveLeft');
+
         //延迟是为了动画效果显示
-        timer = setTimeout(()=>{
-          timer = null;
+        let timer = setTimeout(()=>{
           this.visible = false;
           this.startClose = false;
           position.classList.remove('animated_moveLeft');
           info.classList.remove('animated_fadeOut');
         },this.delay)
-        info.classList.remove('animated_fadeIn');
-        info.classList.add('animated_fadeOut');
-        position.classList.add('animated_moveLeft');
         this.$once('hook:beforeDestroy',()=>{
           clearTimeout(timer);
+          timer = null;
         })
       }
     },
@@ -116,9 +113,6 @@ export default {
         this.timer = setTimeout(()=>{
           this.timer = null;
         },this.JL_Duration)
-        this.$once('hook:beforeDestroy',()=>{
-          clearTimeout(this.timer)
-        })
 
         this.$refs.Popup.play();
         const info = this.$refs.info;
@@ -179,12 +173,11 @@ export default {
       const keyCode = e.keyCode || e.which || e.charCode;
       const altKey = e.altKey;
 
-      if(altKey && keyCode === this.keyCode) {
-        if(!this.visible){
-          this.open(this.PositionX,this.PositionY);
-        }else{
-          this.close();
-        }
+      if(altKey && keyCode === this.keyCode && !this.visible) {
+        this.open(this.PositionX,this.PositionY);
+      }
+      else{
+        this.close();
       }
 
       //都是阻止默认行为，一个W3C标准，一个IE标准，不过IE死了（好似）

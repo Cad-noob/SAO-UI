@@ -23,6 +23,9 @@
 </template>
 
 <script>
+/*
+  说下为什么不用clip-path，因为这样没法利用border画边框,svg可以解决这个问题，但是粗细不是很完美，所以有一些补充
+*/
 export default {
   name: "hp",
   props:{
@@ -38,12 +41,14 @@ export default {
         return 'player'
       }
     },
+    //当前要变化到的HP数值
     current:{
       type:Number,
       default(){
         return 100;
       }
     },
+    //总血量
     total:{
       type:Number,
       default(){
@@ -59,9 +64,9 @@ export default {
   },
   data(){
     return{
-      percent:1,
-      currentHp:100,
-      duration:1000,
+      percent:1, //血量百分比
+      currentHp:100, //初始默认实时hp，区分这个与props中current的区别，整个HP变化过程由currentHp变化到current
+      duration:1000, //血条变化动画时间,写在这方便修改
     }
   },
   computed:{
@@ -76,9 +81,9 @@ export default {
   },
   watch:{
     current:function (n,o){
-      let c = n - o;
-      let absC = Math.abs(c);
-      let delay = Math.floor(Math.abs(1000/c));
+      let c = n - o; //差值
+      let absC = Math.abs(c); //差的绝对值
+      let delay = Math.floor(Math.abs(this.duration/c)); //总动画时间内完成数值变化，每次加减1所需要的单位时间
       if(c>0){
         for(let i=0;i<absC;i++){
           setTimeout(()=>{
