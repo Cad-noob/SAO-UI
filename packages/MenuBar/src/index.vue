@@ -3,7 +3,7 @@
     <audio ref="Click" src="../../../lib/sounds/Feedback.SAO.Click.mp3"></audio>
     <ul ref="item_box" class="item_box" :class="[active?'item_box_active':'']">
       <li v-for="(item,index) in liArr" :key="index" class="item" :class="[startClose?'animated_up':'animated_down']"
-      @click="activeFn(item,index)">
+          @click="activeFn(item,index)">
         <div class="in-circle">
           <i v-if="item.iClass" :class="item.iClass"></i>
           <!--        <img v-if="!item.iClass" :src="liArr.src" :class="item.class" alt=""> -->
@@ -114,6 +114,7 @@ export default {
       },this.activeDelay)
     },
     mouseWheelHandle(e){
+      e.preventDefault();
       let X = this.$parent.$refs.position.offsetLeft;
       let Y = this.$parent.$refs.position.offsetTop;
       let PositionX = this.$parent.$data.PositionX;
@@ -167,7 +168,7 @@ export default {
       handler:function (val){
         if(val){
           this.init();
-          addEventListener('mousewheel',this.mouseWheelHandle);
+          addEventListener('mousewheel',this.mouseWheelHandle,{passive:false});
         }else{
           this.active = false;
           removeEventListener('mousewheel',this.mouseWheelHandle);

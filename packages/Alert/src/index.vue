@@ -10,11 +10,12 @@
         <span>{{title}}</span>
       </div>
 
-      <div>
-        <span><slot></slot></span>
+      <div ref="center">
+        <span><slot name="center"></slot></span>
       </div>
 
       <div>
+        <slot name="footer"></slot>
         <i v-if="icon" class="ok" @click="okEvent">
           <i class="in_ok"></i>
         </i>
@@ -55,6 +56,20 @@ export default {
       default(){
         return false
       },
+    },
+    //是否点击自身关闭
+    clickClose:{
+      type:Boolean,
+      default(){
+        return false
+      }
+    },
+    //中间部分的高度
+    ContextHeight:{
+      type:String,
+      default(){
+        return '101px';
+      }
     }
   },
   data(){
@@ -95,11 +110,11 @@ export default {
     }
   },
   mounted() {
-    if(!this.icon) this.$refs.saoAlert.addEventListener('click',this.CloseAlert);
+    this.$refs.center.style.setProperty('--Yheight',this.ContextHeight);
+    if(this.clickClose) this.$refs.saoAlert.addEventListener('click',this.CloseAlert);
   }
 }
 </script>
-
 <style scoped>
 @font-face {
   font-family: 'sao';
@@ -183,6 +198,23 @@ export default {
   white-space: nowrap;
 }
 
+.saoMsgBox>div:nth-child(3) a{
+  --slice1:inset(0 50% 0 50%);
+  --slice2:inset(0 0 0 0);
+  animation: appear ease var(--open-duraton);
+  animation-fill-mode: forwards;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.Close .saoMsgBox>div:nth-child(3) a{
+  --slice1:inset(0 50% 0 50%);
+  --slice2:inset(0 0 0 0);
+  animation: disappear ease var(--close-duration);
+  animation-fill-mode: forwards;
+}
+
 .saoMsgBox>div:nth-child(3){
   height: 83px;
   background: rgba(255, 255, 255, 0.8);
@@ -214,8 +246,8 @@ export default {
   top:50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
 }
 .in_close{
@@ -224,7 +256,7 @@ export default {
 
 .in_close::before{
   content:"";
-  width: 20px;
+  width: 18px;
   height: 5px;
   background: #ffffff;
   position: absolute;
@@ -235,7 +267,7 @@ export default {
 
 .in_close::after{
   content:"";
-  width: 20px;
+  width: 18px;
   height: 5px;
   background: #ffffff;
   position: absolute;
@@ -289,11 +321,11 @@ export default {
   }
   100%{
     opacity: 1;
-    height: 101px;
+    height: var(--Yheight);
   }
 }
 
-.saoMsgBox>div:nth-child(2) span{
+.saoMsgBox>div:nth-child(2)>span{
   --slice1:inset(50% 0 50% 0);
   --slice2:inset(0 0 0 0);
   clip-path:inset(50% 0 50% 0);
@@ -310,7 +342,7 @@ export default {
   white-space: nowrap;
 }
 
-.Close .saoMsgBox>div:nth-child(2) span,.Close .title span{
+.Close .saoMsgBox>div:nth-child(2)>span,.Close .title>span{
   --slice1:inset(0 50% 0 50%);
   --slice2:inset(0 0 0 0);
   animation: disappear ease var(--close-duration);

@@ -2,7 +2,7 @@
   <div class="waifu" @touchstart="start" @touchmove="move">
     <div class="waifu-tips"></div>
     <canvas id="live2d" class="live2d"></canvas>
-    <i class="fa fa-refresh" @click="change()"></i>
+    <i :class="freshIcon" @click="change()"></i>
 <!--    <div class="waifu-tool">-->
 <!--      <span class="fui-home"></span>-->
 <!--      <span class="fui-chat"></span>-->
@@ -46,6 +46,9 @@ export default {
       default(){
         return 80
       }
+    },
+    freshIcon:{
+      type:String,
     }
   },
   data(){

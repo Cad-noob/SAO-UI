@@ -51,6 +51,12 @@ export default {
       default(){
         return 666;
       }
+    },
+    active:{
+      type:Boolean,
+      default(){
+        return true;
+      }
     }
   },
   data(){
@@ -61,7 +67,7 @@ export default {
       startClose:false,//开始执行消失之前的操作
       delay:500,//500毫秒消失，动画显示
       timer:null,//模仿节流所设置的变量
-      JL_Duration:2000, //节流wait时间
+      JL_Duration:1000, //节流wait时间
       // percent:0,//预期用来做偏移量的百分比，效果不理想搁置中
       maxOffSetX: 70,//X轴最大偏移量
       XMiddle: 25,//便宜到快中心的位置的距离
@@ -193,39 +199,57 @@ export default {
         this.open(this.PositionX,this.firstY);
       }
     },
+    getPosition(e){
+      this.PositionX = e.clientX;
+      this.PositionY = e.clientY;
+    },
+    slideDownFn(e){
+      this.firstY = e.clientY;
+      this.firstTime = new Date();
+
+      document.addEventListener('mousemove',this.downMove)
+      document.addEventListener('mouseup',()=>{
+        document.removeEventListener('mousemove',this.downMove)
+      })
+    },
+    initEvent(){
+      const that = this;
+      //实时获取鼠标坐标
+      document.addEventListener('mousemove', that.getPosition);
+
+      //alt+keycode弹出信息框，并且是跟随鼠标的位置移动而改变显示成位置
+      document.addEventListener('keydown', that.keyDownHandle);
+
+      //设置鼠标可以向下滑动生成菜单
+      if(this.slideDown){
+        document.addEventListener('mousedown',that.slideDownFn);
+      }
+    },
+    removeEvent(){
+      document.removeEventListener('mousemove',this.getPosition);
+      document.removeEventListener('keydown', this.keyDownHandle);
+      document.removeEventListener('mousedown',this.slideDownFn);
+    }
   },
   watch:{
     closeBar:{
       handler:function (val){
-        if(val){
-          this.close();
+        if(val) this.close();
+      }
+    },
+    active:{
+      handler:function (n,o){
+        if(n){
+          this.initEvent();
+        }else{
+          this.removeEvent();
         }
       }
     }
   },
-  mounted: function () {
-    const that = this;
-    //实时获取鼠标坐标
-    document.addEventListener('mousemove', (ev) => {
-      that.PositionX = ev.clientX;
-      that.PositionY = ev.clientY;
-    })
-
-    //alt+keycode弹出信息框，并且是跟随鼠标的位置移动而改变显示成位置
-    document.addEventListener('keydown', that.keyDownHandle)
-
-    // document.addEventListener('mousedown', that.downMove)
-    //设置鼠标可以向下滑动生成菜单
-    if(this.slideDown){
-      document.addEventListener('mousedown', (ev)=>{
-        that.firstY = ev.clientY;
-        that.firstTime = new Date();
-
-        document.addEventListener('mousemove',that.downMove)
-        document.addEventListener('mouseup',()=>{
-          document.removeEventListener('mousemove',that.downMove)
-        })
-      })
+  mounted() {
+    if(this.active){
+      this.initEvent();
     }
 
     //设置Parallax参数，鼠标移动让DOM跟随移动
